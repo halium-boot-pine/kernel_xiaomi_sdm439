@@ -18,12 +18,10 @@
 *.so
 *.so.dbg
 *.mod.c
-*.i
 *.lst
 *.symtypes
 *.order
 *.elf
-*.bin
 *.tar
 *.gz
 *.bz2
@@ -31,6 +29,8 @@
 *.xz
 *.lz4
 *.lzo
+*.zst
+*.rej
 *.patch
 *.gcno
 *.ll
