@@ -59,7 +59,7 @@ static int ft8006sp_short_test(struct fts_test *tdata, bool *test_result)
 	memset(tdata->buffer, 0, tdata->buffer_length);
 	adcdata = tdata->buffer;
 
-	ret = enter_factory_mode();
+	ret = enter_factory_mode_2();
 	if (ret < 0) {
 		FTS_TEST_SAVE_ERR("enter factory mode fail,ret=%d\n",
 			ret);
@@ -135,7 +135,7 @@ static int ft8006sp_open_test(struct fts_test *tdata, bool *test_result)
 	memset(tdata->buffer, 0, tdata->buffer_length);
 	opendata = tdata->buffer;
 
-	ret = enter_factory_mode();
+	ret = enter_factory_mode_2();
 	if (ret < 0) {
 		FTS_TEST_SAVE_ERR("enter factory mode fail,ret=%d\n", ret);
 		goto test_err;
@@ -149,7 +149,7 @@ static int ft8006sp_open_test(struct fts_test *tdata, bool *test_result)
 
 	/* check test status */
 	for (i = 0; i < FACTORY_TEST_RETRY; i++) {
-		sys_delay(FACTORY_TEST_RETRY_DELAY);
+		sys_delay_2(FACTORY_TEST_RETRY_DELAY);
 		ret = fts_test_read_reg(FACTORY_REG_OPEN_STATE, &state);
 		if ((ret >= 0) && (TEST_RETVAL_AA == state))
 			break;
@@ -164,7 +164,7 @@ static int ft8006sp_open_test(struct fts_test *tdata, bool *test_result)
 
 	/* get cb data */
 	byte_num = tdata->node.node_num;
-	ret = get_cb_incell(0, byte_num, opendata);
+	ret = get_cb_incell_2(0, byte_num, opendata);
 	if (ret) {
 		FTS_TEST_SAVE_ERR("get CB fail\n");
 		goto restore_reg;
@@ -223,7 +223,7 @@ static int ft8006sp_cb_test(struct fts_test *tdata, bool *test_result)
 		goto test_err;
 	}
 
-	ret = enter_factory_mode();
+	ret = enter_factory_mode_2();
 	if (ret < 0) {
 		FTS_TEST_SAVE_ERR("enter factory mode fail,ret=%d\n", ret);
 		goto test_err;
@@ -244,7 +244,7 @@ static int ft8006sp_cb_test(struct fts_test *tdata, bool *test_result)
 	}
 
 	byte_num = tdata->node.node_num;
-	ret = get_cb_incell(0, byte_num, cbdata);
+	ret = get_cb_incell_2(0, byte_num, cbdata);
 	if (ret < 0) {
 		FTS_TEST_SAVE_ERR("get cb fail\n");
 		goto test_err;
@@ -296,7 +296,7 @@ static int ft8006sp_rawdata_test(struct fts_test *tdata,
 		goto test_err;
 	}
 
-	ret = enter_factory_mode();
+	ret = enter_factory_mode_2();
 	if (ret < 0) {
 		FTS_TEST_SAVE_ERR("enter factory mode fail,ret=%d\n", ret);
 		goto test_err;
@@ -367,7 +367,7 @@ static int ft8006sp_lcdnoise_test(struct fts_test *tdata,
 	memset(tdata->buffer, 0, tdata->buffer_length);
 	lcdnoise = tdata->buffer;
 
-	ret = enter_factory_mode();
+	ret = enter_factory_mode_2();
 	if (ret < 0) {
 		FTS_TEST_SAVE_ERR("enter factory mode fail,ret=%d\n", ret);
 		goto test_err;
@@ -415,7 +415,7 @@ static int ft8006sp_lcdnoise_test(struct fts_test *tdata,
 	}
 
 	/* check test status */
-	sys_delay(frame_num * FACTORY_TEST_DELAY / 2);
+	sys_delay_2(frame_num * FACTORY_TEST_DELAY / 2);
 	for (i = 0; i < FACTORY_TEST_RETRY; i++) {
 		status = 0xFF;
 		ret = fts_test_read_reg(FACTORY_REG_LCD_NOISE_TEST_STATE,
@@ -425,7 +425,7 @@ static int ft8006sp_lcdnoise_test(struct fts_test *tdata,
 		else
 			FTS_TEST_DBG("reg%x=%x,retry:%d\n",
 						 FACTORY_REG_LCD_NOISE_TEST_STATE, status, i);
-		sys_delay(FACTORY_TEST_RETRY_DELAY);
+		sys_delay_2(FACTORY_TEST_RETRY_DELAY);
 	}
 	if (i >= FACTORY_TEST_RETRY) {
 		FTS_TEST_SAVE_ERR("lcdnoise test timeout\n");
@@ -433,7 +433,7 @@ static int ft8006sp_lcdnoise_test(struct fts_test *tdata,
 	}
 	/* read lcdnoise */
 	byte_num = tdata->node.node_num * 2;
-	ret = read_mass_data(FACTORY_REG_RAWDATA_ADDR,
+	ret = read_mass_data_2(FACTORY_REG_RAWDATA_ADDR,
 			byte_num, lcdnoise);
 	if (ret < 0) {
 		FTS_TEST_SAVE_ERR("read rawdata fail\n");
@@ -492,7 +492,7 @@ static int start_test_ft8006sp(void)
 		return -EINVAL;
 	}
 	/* enter factory */
-	ret = enter_factory_mode();
+	ret = enter_factory_mode_2();
 	if (ret < 0)
 		fts_ftest->test_item[FTS_ENTER_FACTORY_MODE].testresult = RESULT_NG ;
 	else {

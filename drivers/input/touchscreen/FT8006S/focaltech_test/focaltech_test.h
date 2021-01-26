@@ -548,19 +548,19 @@ extern struct test_funcs test_func_ft8006sp;
 
 extern struct fts_test *fts_ftest;
 
-void sys_delay(int ms);
-int focal_abs(int value);
+void sys_delay_2(int ms);
+int focal_abs_2(int value);
 void print_buffer(int *buffer, int length, int line_num);
 int fts_test_read_reg(u8 addr, u8 *val);
 int fts_test_write_reg(u8 addr, u8 val);
 int fts_test_read(u8 addr, u8 *readbuf, int readlen);
 int fts_test_write(u8 addr, u8 *writebuf, int writelen);
-int enter_work_mode(void);
-int enter_factory_mode(void);
-int read_mass_data(u8 addr, int byte_num, int *buf);
+int enter_work_mode_2(void);
+int enter_factory_mode_2(void);
+int read_mass_data_2(u8 addr, int byte_num, int *buf);
 int chip_clb(void);
-int wait_state_update(u8 retval);
-int get_cb_incell(u16 saddr, int byte_num, int *cb_buf);
+int wait_state_update_2(u8 retval);
+int get_cb_incell_2(u16 saddr, int byte_num, int *cb_buf);
 int short_get_adcdata_incell(u8 retval, u8 ch_num, int byte_num, int *adc_buf);
 int start_scan(void);
 int get_rawdata(int *data);
@@ -578,14 +578,14 @@ int get_rawdata_mc(u8 fre, u8 fir, int *rawdata);
 int short_get_adc_data_mc(u8 retval, int byte_num, int *adc_buf, u8 mode);
 bool compare_mc_sc(bool, bool, int *, int *, int *);
 void show_data_mc_sc(int *data);
-void *fts_malloc(size_t size);
-void fts_free_proc(void *p);
+void *fts_malloc_2(size_t size);
+void fts_free_proc_2(void *p);
 void fts_test_save_data(char *name, int code, int *data, int datacnt,
 			bool mc_sc, bool key, bool result);
 
-#define fts_malloc_r(p, size) do {\
+#define fts_malloc_2_r(p, size) do {\
 if (NULL == p) {\
-	p = fts_malloc(size);\
+	p = fts_malloc_2(size);\
 	if (NULL == p) {\
 		return -ENOMEM;\
 	} \
@@ -594,7 +594,7 @@ if (NULL == p) {\
 
 #define fts_free(p) do {\
 if (p) {\
-	fts_free_proc(p);\
+	fts_free_proc_2(p);\
 	p = NULL;\
 	} \
 } while (0)

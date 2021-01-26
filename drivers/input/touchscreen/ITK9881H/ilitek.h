@@ -786,7 +786,6 @@ extern void ilitek_tddi_spi_recovery(void);
 extern void ilitek_tddi_wq_ctrl(int type, int ctrl);
 extern int ilitek_tddi_mp_test_handler(char *apk, bool lcm_on);
 extern void ilitek_tddi_report_handler(void);
-extern int ilitek_tddi_sleep_handler(int mode);
 extern int ilitek_tddi_reset_ctrl(int mode);
 extern int ilitek_tddi_init(void);
 extern int ilitek_tddi_dev_init(struct ilitek_hwif_info *hwif);

@@ -1,5 +1,5 @@
 /************************************************************************
-* Copyright (C) 2012-2019, Focaltech Systems (R)£¬All Rights Reserved.
+* Copyright (C) 2012-2019, Focaltech Systems (R)ï¿½ï¿½All Rights Reserved.
 * Copyright (C) 2019 XiaoMi, Inc.
 *
 * File Name: focaltech_flash.h
@@ -172,7 +172,7 @@ struct upgrade_setting_nf {
 struct upgrade_module {
 	int id;
 	char vendor_name[MAX_MODULE_VENDOR_NAME_LEN];
-	u8 *fw_file;
+	u8 *fw_file_2;
 	u32 fw_len;
 };
 
@@ -189,8 +189,8 @@ struct fts_upgrade {
 	u32 lic_length;
 };
 
-int fts_fwupg_get_ver_in_tp(struct fts_ts_data *ts_data, u8 *ver);
-bool fts_fwupg_check_fw_valid(struct fts_ts_data *ts_data);
+int fts_fwupg_get_ver_in_tp_2(struct fts_ts_data *ts_data, u8 *ver);
+bool fts_fwupg_check_fw_valid_2(struct fts_ts_data *ts_data);
 /*****************************************************************************
 * Global variable or extern global variabls/functions
 *****************************************************************************/

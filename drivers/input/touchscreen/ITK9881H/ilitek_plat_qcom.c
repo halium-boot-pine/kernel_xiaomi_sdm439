@@ -272,7 +272,6 @@ static irqreturn_t ilitek_plat_isr_top_half(int irq, void *dev_id)
 			atomic_read(&idev->fw_stat),
 			atomic_read(&idev->tp_sw_mode),
 			atomic_read(&idev->mp_stat),
-			atomic_read(&idev->tp_sleep),
 			atomic_read(&idev->esd_stat));
 
 	if (irq != idev->irq_num) {
@@ -288,7 +287,6 @@ static irqreturn_t ilitek_plat_isr_top_half(int irq, void *dev_id)
 
 	if (!idev->report || atomic_read(&idev->tp_reset) ||
 		atomic_read(&idev->fw_stat) || atomic_read(&idev->tp_sw_mode) ||
-		atomic_read(&idev->mp_stat) || atomic_read(&idev->tp_sleep) ||
 		atomic_read(&idev->esd_stat)) {
 			ipio_debug("ignore interrupt !\n");
 			return IRQ_HANDLED;
@@ -340,7 +338,6 @@ static int ilitek_plat_notifier_fb(struct notifier_block *self, unsigned long ev
 #ifdef FACTORY_VERSION_ENABLE
 		if (strnstr(saved_command_line, "androidboot.mode=ffbm-01", strlen(saved_command_line)) && event == FB_EVENT_SUSPEND) {
 			ipio_info("We are in ffbm-01 mode!\n");
-			ilitek_tddi_sleep_handler(TP_DEEP_SLEEP);
 			return NOTIFY_OK;
 		}
 #endif
@@ -364,7 +361,6 @@ static int ilitek_plat_notifier_fb(struct notifier_block *self, unsigned long ev
 					if (event != FB_EVENT_BLANK)
 						return NOTIFY_DONE;
 				}
-				ilitek_tddi_sleep_handler(TP_SUSPEND);
 				break;
 			case FB_BLANK_UNBLANK:
 			case FB_BLANK_NORMAL:
@@ -386,37 +382,7 @@ static int ilitek_plat_notifier_fb(struct notifier_block *self, unsigned long ev
 	return NOTIFY_OK;
 }
 #else
-static void ilitek_plat_early_suspend(struct early_suspend *h)
-{
-	ilitek_tddi_sleep_handler(TP_SUSPEND);
-}
-
-static void ilitek_plat_late_resume(struct early_suspend *h)
-{
-	ilitek_tddi_sleep_handler(TP_RESUME);
-}
 #endif
-
-static void ilitek_plat_sleep_init(void)
-{
-#ifdef CONFIG_FB
-	ipio_info("Init notifier_fb struct\n");
-	idev->notifier_fb.notifier_call = ilitek_plat_notifier_fb;
-#ifdef CONFIG_PLAT_SPRD
-	if (adf_register_client(&idev->notifier_fb))
-		ipio_err("Unable to register notifier_fb\n");
-#else
-	if (fb_register_client(&idev->notifier_fb))
-		ipio_err("Unable to register notifier_fb\n");
-#endif /* CONFIG_PLAT_SPRD */
-#else
-	ipio_info("Init eqarly_suspend struct\n");
-	idev->early_suspend.suspend = ilitek_plat_early_suspend;
-	idev->early_suspend.resume = ilitek_plat_late_resume;
-	idev->early_suspend.level = EARLY_SUSPEND_LEVEL_BLANK_SCREEN + 1;
-	register_early_suspend(&idev->early_suspend);
-#endif
-}
 
 static int ilitek_plat_probe(void)
 {
@@ -433,7 +399,6 @@ static int ilitek_plat_probe(void)
 	}
 
 	ilitek_plat_irq_register();
-	ilitek_plat_sleep_init();
 	is_ilitek_tp = true;
 	return 0;
 
